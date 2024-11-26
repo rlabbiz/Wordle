@@ -5,6 +5,19 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+:root {
+  --color-primary: #5C5470;
+  --color-secondary: #B9B4C7;
+  --color-bg: #352F44;
+  --color-text: #FAF0E6;
+  --color-success: #28a745;
+  --color-danger: #dc3545;
+  --color-warning: #ffc107;
+  --color-info: #17a2b8;
 }
 
 code {
