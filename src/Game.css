@@ -1,3 +1,19 @@
+.hints {
+    position: absolute;
+    top: 120px;
+    right: 50%;
+    transform: translateX(50%);
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    padding: 15px 25px;
+    border-radius: var(--px-border-radius);
+}
+
+.hints .hint-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
 .notification {
     position: absolute;
     top: 5px;

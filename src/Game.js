@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import './Game.css';
 import { Logo } from './Home';
 import { useState, useEffect } from 'react';
@@ -7,40 +8,23 @@ import { useState, useEffect } from 'react';
 
 let timeInterval = null;
 let word = null;
-let hints = null;
-let previousWord = null;
+let previousWord = {
+    data: [],
+    word: ''
+};
 
 export function Game(props) {
-
+    useEffect(function() {}, [props.level]);
     return (
         <>
             <Notification />
             <Logo />
             <GameHeader />
-            <GameContent level={props.level} />
+            <GameContent
+                level={props.level}
+            />
             <Keyboard />
         </>
-    )
-}
-
-function WordsHistory(props) {
-    const innerHTML = [];
-
-    useEffect(function() {}, [props.wordsHistory]);
-
-    for (let i = 0; i < props.wordsHistory.length; i++) {
-        innerHTML.push(
-            <div className='word-history-item' key={i}>
-                <span className='word-history-letter'>Word: </span>
-                <span className='word-history-word'>{props.wordsHistory[i]}</span>
-            </div>
-        );
-    }
-
-    return (
-        <div className="words-history container">
-            {innerHTML}
-        </div>
     )
 }
 
@@ -117,6 +101,7 @@ function DisplayTime() {
             clearInterval(timeInterval);
         }
     }, []);
+
     return (
         <span className='time item'>Time: {time.toFixed(2)}</span>
     )
@@ -140,8 +125,8 @@ async function fetchrandomWord(length) {
 
 
 async function checkWord(word) {
-    if (previousWord === word)
-        return {title: 'No Definitions Found'};
+    if (previousWord.word === word)
+        return previousWord.data;
     const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`, {
         method: 'GET',
         headers: {
@@ -149,7 +134,9 @@ async function checkWord(word) {
             'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com'
         }
     }).then(response => response.json());
-    previousWord = response;
+    
+    previousWord.data = response;
+    previousWord.word = word;
     return response;
 }
 
@@ -182,6 +169,9 @@ function DisplayNotification(type, text) {
 }
 
 function GameContent(props) {
+
+    const navigate = useNavigate();
+
     useEffect(function() {
         const keyboardKeys = document.querySelectorAll('.key');
 
@@ -199,7 +189,6 @@ function GameContent(props) {
 
         // function to set keyboard keys if the letter is info or correct or wrong
         function setKeyboardKeys(key, type) {
-            console.log('Key: ', key + ' Type: ', type);
             for (let i = 0; i < keyboardKeys.length; i++) {
                 if (keyboardKeys[i].innerHTML === key) {
                     if (type === 'info') {
@@ -224,7 +213,6 @@ function GameContent(props) {
             }
         }
 
-        console.log('word: ', word);
         (async function() {
             // fetch the random word
             let tmp = await fetchrandomWord(props.level);
@@ -238,10 +226,6 @@ function GameContent(props) {
             
             // save the word to the variable, and save the hints to the variable
             word = wordToarray(tmp[0]);
-            hints = data[0];
-
-            console.log('Word: ', word.join(''));
-            console.log('Hints: ', hints);
         })();
 
         const lines = document.querySelectorAll('.game-line');
@@ -251,6 +235,20 @@ function GameContent(props) {
         const letters = 'abcdefghijklmnopqrstuvwxyz';
         let index = 0;
         let lineIndex = 0;
+
+        // handle hint button click, check index of the letter and eneter letter to keyboard event 
+        const hintButton = document.querySelector('.hint-button');
+        function handleHintButton() {
+            if (index < lettersLenght) {
+                spans[index].innerText = word[index];
+                spans[index].classList.add('filled');
+                lettersFiled[index] = word[index];
+                index++;
+            }
+        }
+        if (hintButton) {
+            hintButton.addEventListener('click', handleHintButton)
+        }
 
         // function to handle the next line, if the line is the last line then call handleGameOver function if not then call handleCurrentLine function
         function handleNextLine() {
@@ -262,8 +260,11 @@ function GameContent(props) {
             } else {
                 handleCurrentLine();
                 // 
-                if (lineIndex >= lines.length - 1) 
-                    return DisplayNotification('info', 'You have ');
+                if (lineIndex >= lines.length - 1){
+                    hintButton.removeEventListener('click', handleHintButton);
+                    document.removeEventListener('keydown', handleKeyDown);
+                    return ;
+                }
                 index = 0;
                 lines[lineIndex].classList.remove('use');
                 lineIndex++;
@@ -297,19 +298,18 @@ function GameContent(props) {
                 wordIndex++;
             }
             if (currect.length === word.length) {
-                console.log('Word is correct');
                 return handleGameOver();
             }
         }
 
         // function to handle the game over, clear the interval, show the notification and remove the event listener
         function handleGameOver() {
-            console.log('Game Over');
             clearInterval(timeInterval);
             DisplayNotification('success', 'You have completed the game in ');
             
             // remove the event listener
             document.removeEventListener('keydown', handleKeyDown);
+            hintButton.removeEventListener('click', handleHintButton);
         }
         handleNextLine();
         function handleKeyDown(e) {
@@ -337,7 +337,7 @@ function GameContent(props) {
                     }
                 })();
                 return ;
-            } 
+            }
 
             // handle backspace key, remove the last letter
             if (e.key === 'Backspace') {
@@ -356,7 +356,6 @@ function GameContent(props) {
                 return;
 
             // if all letters are filled then return
-            console.log('Letters Filed: ');
             if (index >= lettersLenght) 
                 return;
 
@@ -378,6 +377,7 @@ function GameContent(props) {
         moreButton.addEventListener('click', function() {
             clearInterval(timeInterval);
             document.removeEventListener('keydown', handleKeyDown);
+            hintButton.removeEventListener('click', handleHintButton);
 
             const allSpans = document.querySelectorAll('.letter');
             for (let i = 0; i < allSpans.length; i++) {
@@ -397,13 +397,14 @@ function GameContent(props) {
             }
             handleNextLine();
             document.addEventListener('keydown', handleKeyDown);
+            hintButton.addEventListener('click', handleHintButton);
         });
 
         // handle new Button click
         const newButton = document.querySelector('.new-button');
         if (newButton) {
             newButton.addEventListener('click', function() {
-                window.location.reload();
+                navigate('/');
             });
         }
 
