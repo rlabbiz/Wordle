@@ -11,14 +11,41 @@ let hints = null;
 let previousWord = null;
 
 export function Game(props) {
+
+    const [wordsHistory, setWordsHistory] = useState([]);
+
+    // function to add the word to the words history, and re-render just the WordsHistory component, and passed as props to the GameContent component
+    function addWordToHistory(word) {
+        setWordsHistory((prev) => [...prev, word]);
+    }
+
     return (
         <>
             <Notification />
             <Logo />
             <GameHeader />
-            <GameContent level={props.level} />
+            <GameContent level={props.level} addWordToHistory={addWordToHistory} />
+            <WordsHistory wordsHistory={wordsHistory} />
             <Keyboard />
         </>
+    )
+}
+
+function WordsHistory(props) {
+    const innerHTML = [];
+    for (let i = 0; i < props.wordsHistory.length; i++) {
+        innerHTML.push(
+            <div className='word-history-item' key={i}>
+                <span className='word-history-letter'>Word: </span>
+                <span className='word-history-word'>{props.wordsHistory[i]}</span>
+            </div>
+        );
+    }
+
+    return (
+        <div className="words-history container">
+            {innerHTML}
+        </div>
     )
 }
 
@@ -310,6 +337,7 @@ function GameContent(props) {
                     if (check.title === 'No Definitions Found') {
                         DisplayNotification('error', 'Not a valid word');
                     } else {
+                        props.addWordToHistory(wordToCheck.join(''));
                         handleNextLine()
                     }
                 })();
