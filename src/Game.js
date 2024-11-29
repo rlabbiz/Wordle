@@ -12,20 +12,12 @@ let previousWord = null;
 
 export function Game(props) {
 
-    const [wordsHistory, setWordsHistory] = useState([]);
-
-    // function to add the word to the words history, and re-render just the WordsHistory component, and passed as props to the GameContent component
-    function addWordToHistory(word) {
-        setWordsHistory((prev) => [...prev, word]);
-    }
-
     return (
         <>
             <Notification />
             <Logo />
             <GameHeader />
-            <GameContent level={props.level} addWordToHistory={addWordToHistory} />
-            <WordsHistory wordsHistory={wordsHistory} />
+            <GameContent level={props.level} />
             <Keyboard />
         </>
     )
@@ -33,6 +25,9 @@ export function Game(props) {
 
 function WordsHistory(props) {
     const innerHTML = [];
+
+    useEffect(function() {}, [props.wordsHistory]);
+
     for (let i = 0; i < props.wordsHistory.length; i++) {
         innerHTML.push(
             <div className='word-history-item' key={i}>
@@ -177,6 +172,7 @@ function DisplayNotification(type, text) {
             notificationText.innerText = text;
             notification.style.backgroundColor = 'red';
         } else {
+            notification.style.backgroundColor = 'green';
             notificationText.innerText = text + time.innerText;
         }
     }
@@ -265,8 +261,9 @@ function GameContent(props) {
                 return ;
             } else {
                 handleCurrentLine();
+                // 
                 if (lineIndex >= lines.length - 1) 
-                    return handleGameOver();
+                    return DisplayNotification('info', 'You have ');
                 index = 0;
                 lines[lineIndex].classList.remove('use');
                 lineIndex++;
@@ -313,7 +310,6 @@ function GameContent(props) {
             
             // remove the event listener
             document.removeEventListener('keydown', handleKeyDown);
-            return ;
         }
         handleNextLine();
         function handleKeyDown(e) {
@@ -337,7 +333,6 @@ function GameContent(props) {
                     if (check.title === 'No Definitions Found') {
                         DisplayNotification('error', 'Not a valid word');
                     } else {
-                        props.addWordToHistory(wordToCheck.join(''));
                         handleNextLine()
                     }
                 })();
@@ -416,7 +411,7 @@ function GameContent(props) {
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         }
-    }, );
+    }, [props.level]);
 
     const innerHTML = []
 
