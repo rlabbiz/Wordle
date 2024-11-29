@@ -1,43 +1,27 @@
 import './App.css';
 import { Home } from './Home';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Game } from './Game';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
+  const [level, setLevel] = useState(5);
 
-  // const [level, setLevel] = useState(5);
-  // const [isHome, setIsHome] = useState(true);
-  // console.log('isHome:', isHome);
+  function handleLevel(e) {
+    let level = parseInt(e?.target?.innerText);
+    if (level && level > 2 && level < 8)
+      setLevel(level);
+  }
 
-  // function handleGameStart() {
-  //   if (isHome)
-  //     setIsHome(false);
-  //   else
-  //     setIsHome(true);
-  // }
-
-  // function handleLevel(e) {
-  //   console.log('element : ', e?.target?.innerText)
-  //   let level = parseInt(e?.target?.innerText);
-  //   if (level)
-  //     setLevel(level);
-  // }
-  // if (isHome) {
-  //   return (
-  //     <Home handleGameStart={handleGameStart} handleLevel={handleLevel} />
-  //   );
-  // } else {
-  //   return (
-  //     <Game level={level} />
-  //   );
-  // }
-  useEffect(() => {
-    console.log('useEffect');
-  }, [1]);
   return (
-    <div className="App">dfggdf</div>
+    <Router>
+      <Routes>
+        <Route path="/" exact element={<Home handleLevel={handleLevel} />} />
+        <Route path="/game" element={<Game level={level} />} />
+      </Routes>
+    </Router>
   );
-  
+
 }
 
 export default App;

@@ -6,6 +6,9 @@ import { useState, useEffect } from 'react';
 // https://random-word-api.vercel.app/api?words=10&length=4 for random words
 
 let timeInterval = null;
+let word = null;
+let hints = null;
+let previousWord = null;
 
 export function Game(props) {
     return (
@@ -14,7 +17,63 @@ export function Game(props) {
             <Logo />
             <GameHeader />
             <GameContent level={props.level} />
+            <Keyboard />
         </>
+    )
+}
+
+function Keyboard() {
+    return (
+        <div className="keyboard container">
+            <div className="row">
+                <Key value='q' />
+                <Key value='w' />
+                <Key value='e' />
+                <Key value='r' />
+                <Key value='t' />
+                <Key value='y' />
+                <Key value='u' />
+                <Key value='i' />
+                <Key value='o' />
+                <Key value='p' />
+            </div>
+            <div className="row">
+                <Key value='a' />
+                <Key value='s' />
+                <Key value='d' />
+                <Key value='f' />
+                <Key value='g' />
+                <Key value='h' />
+                <Key value='j' />
+                <Key value='k' />
+                <Key value='l' />
+            </div>
+            <div className="row">
+                <Key value='Enter' />
+                <Key value='z' />
+                <Key value='x' />
+                <Key value='c' />
+                <Key value='v' />
+                <Key value='b' />
+                <Key value='n' />
+                <Key value='m' />
+                <Key value='Backspace' />
+            </div>
+        </div>
+    )
+}
+
+function Key(props) {
+    // function to handle the key click, then click the letter on the keyboard 
+    function handleClick() {
+        const event = new KeyboardEvent('keydown', {
+            key: props.value
+        });
+        document.dispatchEvent(event);
+    }
+
+    return (
+        <span className="key" key={props.value} onClick={handleClick}>{props.value}</span>
     )
 }
 
@@ -35,7 +94,7 @@ function DisplayTime() {
         return () => {
             clearInterval(timeInterval);
         }
-    }, );
+    }, []);
     return (
         <span className='time item'>Time: {time.toFixed(2)}</span>
     )
@@ -53,12 +112,14 @@ function GameHeader(props) {
 }
 
 async function fetchrandomWord(length) {
-    console.log(length)
     const response = await fetch(`https://random-word-api.vercel.app/api?words=1&length=${length}`).then(response => response.json());
     return response;
 }
 
+
 async function checkWord(word) {
+    if (previousWord === word)
+        return {title: 'No Definitions Found'};
     const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`, {
         method: 'GET',
         headers: {
@@ -66,7 +127,7 @@ async function checkWord(word) {
             'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com'
         }
     }).then(response => response.json());
-    console.log(response);
+    previousWord = response;
     return response;
 }
 
@@ -87,6 +148,7 @@ function DisplayNotification(type, text) {
     if (notificationText && time){
         if (type === 'error') {
             notificationText.innerText = text;
+            notification.style.backgroundColor = 'red';
         } else {
             notificationText.innerText = text + time.innerText;
         }
@@ -98,16 +160,70 @@ function DisplayNotification(type, text) {
 
 function GameContent(props) {
     useEffect(function() {
-        let word = null;
+        const keyboardKeys = document.querySelectorAll('.key');
+
+        // function to handle the key press on the keyboard and add animastion to the key
+        function handleKeyboardKeys(key) {
+            for (let i = 0; i < keyboardKeys.length; i++) {
+                if (keyboardKeys[i].innerText === key) {
+                    keyboardKeys[i].style.animation = 'pop 0.1s ease';
+                    setTimeout(() => {
+                        keyboardKeys[i].style.animation = '';
+                    }, 100);
+                }
+            }
+        }
+
+        // function to set keyboard keys if the letter is info or correct or wrong
+        function setKeyboardKeys(key, type) {
+            console.log('Key: ', key + ' Type: ', type);
+            for (let i = 0; i < keyboardKeys.length; i++) {
+                if (keyboardKeys[i].innerHTML === key) {
+                    if (type === 'info') {
+                        if (keyboardKeys[i].classList.contains('wrog'))
+                            keyboardKeys[i].classList.remove('wrong');
+                        if (!keyboardKeys[i].classList.contains('success')){
+                            if (!keyboardKeys[i].classList.contains('yellow'))
+                                keyboardKeys[i].classList.add('yellow');
+                        }
+                    } else if (type === 'correct') {
+                        if (keyboardKeys[i].classList.contains('yellow'))
+                            keyboardKeys[i].classList.remove('yellow');
+                        if (keyboardKeys[i].classList.contains('wrong'))
+                            keyboardKeys[i].classList.remove('wrong');
+                        if (!keyboardKeys[i].classList.contains('success'))
+                            keyboardKeys[i].classList.add('success');
+                    } else if (type === 'wrong') {
+                        if (!keyboardKeys[i].classList.contains('success') && !keyboardKeys[i].classList.contains('yellow'))
+                            keyboardKeys[i].classList.add('wrong');
+                    }
+                }
+            }
+        }
+
+        console.log('word: ', word);
         (async function() {
-            const tmp = await fetchrandomWord(props.level);
+            // fetch the random word
+            let tmp = await fetchrandomWord(props.level);
+
+            // check if the word is correct
+            let data = await checkWord(tmp[0]);
+            while (data.title === 'No Definitions Found') {
+                tmp = await fetchrandomWord(props.level);
+                data = await checkWord(tmp[0]);
+            }
+            
+            // save the word to the variable, and save the hints to the variable
             word = wordToarray(tmp[0]);
-            console.log(word.join(''));
+            hints = data[0];
+
+            console.log('Word: ', word.join(''));
+            console.log('Hints: ', hints);
         })();
 
         const lines = document.querySelectorAll('.game-line');
         let spans = document.querySelectorAll('.game-line.use .letter');
-        let lettersLenght = spans?.length;
+        let lettersLenght = props.level;
         let lettersFiled = {};
         const letters = 'abcdefghijklmnopqrstuvwxyz';
         let index = 0;
@@ -143,12 +259,15 @@ function GameContent(props) {
                 // if the letter is correct and letter is not already filled
                 if (spans[i].innerHTML === word[wordIndex] && !wrong.includes(spans[i].innerHTML)) {
                     spans[i].classList.add('green-letter');
+                    setKeyboardKeys(spans[i].innerHTML, 'correct');
                     currect.push(spans[i].innerHTML);
                 }
                 else if (word.includes(spans[i].innerHTML) && !wrong.includes(spans[i].innerHTML) && !currect.includes(spans[i].innerHTML)) {
                     spans[i].classList.add('yellow-letter');
+                    setKeyboardKeys(spans[i].innerHTML, 'info');
                     wrong.push(spans[i].innerHTML);
                 } else {
+                    setKeyboardKeys(spans[i].innerHTML, 'wrong');
                     spans[i].classList.add('gray-letter');
                 }
                 wordIndex++;
@@ -171,6 +290,7 @@ function GameContent(props) {
         }
         handleNextLine();
         function handleKeyDown(e) {
+            handleKeyboardKeys(e.key);
             // handle enter key, check if all keys are pressed and submit
             if (e.key === 'Enter') {
                 // checl if all letters are entered, if not the do nothing and return 
@@ -185,11 +305,13 @@ function GameContent(props) {
                 (async () => {
                     document.removeEventListener('keydown', handleKeyDown);
                     let check = await checkWord(wordToCheck.join(''));
+
                     document.addEventListener('keydown', handleKeyDown);
                     if (check.title === 'No Definitions Found') {
                         DisplayNotification('error', 'Not a valid word');
-                    } else 
+                    } else {
                         handleNextLine()
+                    }
                 })();
                 return ;
             } 
@@ -211,6 +333,7 @@ function GameContent(props) {
                 return;
 
             // if all letters are filled then return
+            console.log('Letters Filed: ');
             if (index >= lettersLenght) 
                 return;
 
@@ -227,10 +350,9 @@ function GameContent(props) {
         // add event listener for keydown event and send the event to handleKeyDown function for processing
         document.addEventListener('keydown', handleKeyDown);
 
-
-        // handle new game button click 
-        const newButton = document.querySelector('.new-button');
-        newButton.addEventListener('click', function() {
+        // handle more button chance click 
+        const moreButton = document.querySelector('.more-button');
+        moreButton.addEventListener('click', function() {
             clearInterval(timeInterval);
             document.removeEventListener('keydown', handleKeyDown);
 
@@ -254,11 +376,19 @@ function GameContent(props) {
             document.addEventListener('keydown', handleKeyDown);
         });
 
+        // handle new Button click
+        const newButton = document.querySelector('.new-button');
+        if (newButton) {
+            newButton.addEventListener('click', function() {
+                window.location.reload();
+            });
+        }
+
         // remove the event listener when the component is unmounted
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         }
-    }, [props.level]);
+    }, );
 
     const innerHTML = []
 

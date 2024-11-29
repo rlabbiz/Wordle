@@ -48,3 +48,43 @@
     align-items: center;
     flex-direction: column;
 }
+
+.keyboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    flex-direction: column;
+}
+
+.keyboard .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;;
+    margin-bottom: 10px;
+}
+
+.keyboard .key {
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    border-radius: var(--px-border-radius);
+    border: var(--px-border);
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.0rem;
+    margin: 0 5px;
+    padding: 20px 25px;
+}
+
+.keyboard .key.yellow {
+    background-color: var(--color-warning);
+}
+
+.keyboard .key.success {
+    background-color: var(--color-success);
+}
+
+.keyboard .key.wrong {
+    background-color: var(--color-gray);
+}

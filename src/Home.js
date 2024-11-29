@@ -1,11 +1,12 @@
 import './Home.css';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function Home(props) {
     return (
         <>
             <Logo />
-            <SelectLevel handleGameStart={props.handleGameStart} handleLevel={props.handleLevel} />
+            <SelectLevel handleLevel={props.handleLevel} />
             <HowToPlay />
             <Footer />
         </>
@@ -29,9 +30,12 @@ export function Logo() {
 }
 
 function SelectLevel(props) {
+    const navigate = useNavigate();
     useEffect(() => {
         const startButton = document.querySelector('.start-button');
-        startButton.addEventListener('click', props.handleGameStart);
+        startButton.addEventListener('click', () => {
+            navigate('/game');
+        });
 
         const levelButtons = document.querySelectorAll('.level-buttons button:not(.start-button)');
         levelButtons?.forEach(button => {
@@ -41,8 +45,7 @@ function SelectLevel(props) {
                 button.classList.add('selected');
             });
         });
-
-    }, []);
+    }, );
 
     return (
         <div className="select-level">
