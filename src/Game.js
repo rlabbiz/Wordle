@@ -412,7 +412,7 @@ function GameContent(props) {
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         }
-    }, [props.level]);
+    }, [props.level, navigate]);
 
     const innerHTML = []
 
