@@ -49,7 +49,6 @@
     border: var(--px-border);
     cursor: pointer;
     font-weight: 700;
-    width: 140px;
     text-align: center;
 }
 
@@ -69,7 +68,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
     margin-top: 20px;
     flex-direction: column;
 }

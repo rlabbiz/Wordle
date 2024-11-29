@@ -110,9 +110,9 @@ function DisplayTime() {
 function GameHeader(props) {
     return (
         <div className="game-header container">
-            <button className="new-button item">New Game</button>
-            <button className="hint-button item">Use Hint</button>
-            <button className='more-button item disable'>More Chance</button>
+            <div className="new-button item">New Game</div>
+            <div className="hint-button item">Use Hint</div>
+            <div className='more-button item'>More Chance</div>
             <DisplayTime />
         </div>
     )

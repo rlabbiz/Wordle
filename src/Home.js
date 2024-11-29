@@ -56,7 +56,7 @@ function SelectLevel(props) {
                     <button>4 Letters</button>
                 </div>
                 <div>
-                    <button className='selected' >5 Letters</button>
+                    <button >5 Letters</button>
                     <button >6 Letters</button>
                 </div>
                 <div>
