@@ -259,7 +259,7 @@ function GameContent(props) {
                 return ;
             } else {
                 handleCurrentLine();
-                
+
                 // add the entered class to the current line and remove it after 1 second
                 const currentLine = document.querySelector('.game-line.use');
                 currentLine?.classList.add('entered');
@@ -338,6 +338,10 @@ function GameContent(props) {
 
                     document.addEventListener('keydown', handleKeyDown);
                     if (check.title === 'No Definitions Found') {
+                        document.querySelector('.game-line.use').classList.add('wrong');
+                        setTimeout(() => {
+                            document.querySelector('.game-line.use').classList.remove('wrong');
+                        }, 1000);
                         DisplayNotification('error', 'Not a valid word');
                     } else {
                         handleNextLine()
