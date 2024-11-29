@@ -102,3 +102,17 @@
 .keyboard .key.wrong {
     background-color: var(--color-gray);
 }
+
+/* style class to added to line if press enter that rotate line */
+.game-line.entered {
+    animation: rotate 1s linear;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotateX(0);
+    }
+    100% {
+        transform: rotateX(360deg);
+    }
+}

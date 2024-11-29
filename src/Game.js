@@ -259,7 +259,14 @@ function GameContent(props) {
                 return ;
             } else {
                 handleCurrentLine();
-                // 
+                
+                // add the entered class to the current line and remove it after 1 second
+                const currentLine = document.querySelector('.game-line.use');
+                currentLine?.classList.add('entered');
+                setTimeout(() => {
+                    currentLine?.classList.remove('entered');
+                }, 1000);
+                
                 if (lineIndex >= lines.length - 1){
                     hintButton.removeEventListener('click', handleHintButton);
                     document.removeEventListener('keydown', handleKeyDown);
