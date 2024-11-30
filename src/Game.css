@@ -52,6 +52,23 @@
     text-align: center;
 }
 
+@media screen and (max-width: 800px) {
+    .game-header .item {
+        padding: 10px 15px;
+
+    }
+    
+    .game-header {
+        flex-wrap: wrap;
+    }
+
+    .game-header .item {
+        margin-bottom: 10px;
+        width: calc((100% - 20px) / 2);
+    }
+    
+}
+
 .game-header .item.disable {
     background-color: black;
     cursor: not-allowed;
@@ -91,6 +108,19 @@
     padding: 20px 25px;
 }
 
+@media screen and (max-width: 800px) {
+    .keyboard  {
+        display: none;
+    }
+
+    .mobile-keyboard {
+        display: flex;
+    }
+
+
+    
+}
+
 .keyboard .key.yellow {
     background-color: var(--color-warning);
 }
@@ -101,6 +131,36 @@
 
 .keyboard .key.wrong {
     background-color: var(--color-gray);
+}
+
+.mobile-keyboard {
+    display: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    /* flex-direction: column; */
+    flex-wrap: wrap;
+
+}
+
+.mobile-keyboard .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;;
+    margin-bottom: 6px;
+}
+
+.mobile-keyboard .key {
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    border-radius: var(--px-border-radius);
+    border: var(--px-border);
+    cursor: pointer;
+    font-weight: 700;
+    font-size: .8rem;
+    margin: 0 1px;
+    padding: 10px 15px;
 }
 
 /* style class to added to line if press enter that rotate line */

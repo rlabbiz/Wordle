@@ -30,42 +30,82 @@ export function Game(props) {
 
 function Keyboard() {
     return (
-        <div className="keyboard container">
-            <div className="row">
-                <Key value='q' />
-                <Key value='w' />
-                <Key value='e' />
-                <Key value='r' />
-                <Key value='t' />
-                <Key value='y' />
-                <Key value='u' />
-                <Key value='i' />
-                <Key value='o' />
-                <Key value='p' />
+        <>
+            <div className="keyboard container">
+                <div className="row">
+                    <Key value='q' />
+                    <Key value='w' />
+                    <Key value='e' />
+                    <Key value='r' />
+                    <Key value='t' />
+                    <Key value='y' />
+                    <Key value='u' />
+                    <Key value='i' />
+                    <Key value='o' />
+                    <Key value='p' />
+                </div>
+                <div className="row">
+                    <Key value='a' />
+                    <Key value='s' />
+                    <Key value='d' />
+                    <Key value='f' />
+                    <Key value='g' />
+                    <Key value='h' />
+                    <Key value='j' />
+                    <Key value='k' />
+                    <Key value='l' />
+                </div>
+                <div className="row">
+                    <Key value='Enter' />
+                    <Key value='z' />
+                    <Key value='x' />
+                    <Key value='c' />
+                    <Key value='v' />
+                    <Key value='b' />
+                    <Key value='n' />
+                    <Key value='m' />
+                    <Key value='Backspace' />
+                </div>
             </div>
-            <div className="row">
-                <Key value='a' />
-                <Key value='s' />
-                <Key value='d' />
-                <Key value='f' />
-                <Key value='g' />
-                <Key value='h' />
-                <Key value='j' />
-                <Key value='k' />
-                <Key value='l' />
+            <div className='mobile-keyboard container'>
+                <div className="row">
+                    <Key value='q' />
+                    <Key value='w' />
+                    <Key value='e' />
+                    <Key value='r' />
+                    <Key value='t' />
+                    <Key value='y' />
+                    <Key value='u' />
+                    <Key value='i' />
+                </div>
+                <div className="row">
+                    <Key value='o' />
+                    <Key value='p' />
+                    <Key value='a' />
+                    <Key value='s' />
+                    <Key value='d' />
+                    <Key value='f' />
+                    <Key value='g' />
+                    <Key value='h' />
+                </div>
+                <div className="row">
+                    <Key value='j' />
+                    <Key value='k' />
+                    <Key value='l' />
+                    <Key value='z' />
+                    <Key value='x' />
+                    <Key value='c' />
+                    <Key value='v' />
+                    <Key value='b' />
+                </div>
+                <div className="row">
+                    <Key value='Enter' />
+                    <Key value='n' />
+                    <Key value='m' />
+                    <Key value='Backspace' />
+                </div>
             </div>
-            <div className="row">
-                <Key value='Enter' />
-                <Key value='z' />
-                <Key value='x' />
-                <Key value='c' />
-                <Key value='v' />
-                <Key value='b' />
-                <Key value='n' />
-                <Key value='m' />
-                <Key value='Backspace' />
-            </div>
-        </div>
+        </>
     )
 }
 
