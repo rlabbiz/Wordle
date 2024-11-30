@@ -113,11 +113,13 @@
         display: none;
     }
 
-    .mobile-keyboard {
-        display: flex;
+    .game-header {
+        margin-bottom: 5px;
     }
 
-
+    .game-header .item {
+        font-size: 0.8rem;
+    }
     
 }
 
@@ -135,13 +137,17 @@
 
 .mobile-keyboard {
     display: none;
-    display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 20px;
-    /* flex-direction: column; */
     flex-wrap: wrap;
+}
 
+@media screen and (max-width: 800px) {
+    .mobile-keyboard {
+        display: flex;
+    }
+    
 }
 
 .mobile-keyboard .row {
