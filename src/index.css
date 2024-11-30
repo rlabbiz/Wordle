@@ -19,6 +19,28 @@ body {
   margin: 0 auto;
 }
 
+@media screen and (max-width: 800px) {
+  .container {
+    width: 100%;
+    padding: 0 20px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    width: 100%;
+    padding: 0 10px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .container {
+    width: 100%;
+    padding: 0 5px;
+  }
+  
+}
+
 :root {
   --color-primary: #5C5470;
   --color-secondary: #B9B4C7;

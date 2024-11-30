@@ -15,7 +15,7 @@ export function Home(props) {
 
 export function Logo() {
     return (
-        <div className="logo">
+        <div className="logo container">
             <h1>
                 <span>W</span>
                 <span>O</span>
