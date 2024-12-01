@@ -3,9 +3,6 @@ import './Game.css';
 import { Logo } from './Home';
 import { useState, useEffect } from 'react';
 
-// https://www.wordsapi.com/#try for words api
-// https://random-word-api.vercel.app/api?words=10&length=4 for random words
-
 let timeInterval = null;
 let word = null;
 let previousWord = {
