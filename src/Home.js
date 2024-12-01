@@ -1,6 +1,6 @@
 import './Home.css';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export function Home(props) {
     return (
@@ -105,9 +105,9 @@ function HowToPlay() {
 function Footer() {
     return (
         <div className='footer'>
-            <p>Wordle</p>
+            <p><Link target='_blank' to='https://wordle.rlabbiz.me/'>WORDLE</Link></p>
             <p>Challenge yourself with unlimited WORDLE puzzle!</p>
-            <p>Created by Rlabbiz - Rida Labbiz</p>
+            <p>Created by <Link target='_blank' to='https://rlabbiz.me/'>Rlabbiz - Rida Labbiz</Link></p>
         </div>
     )
 }
