@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import './Game.css';
-import { Logo } from './Home';
+import { Logo } from '../Home/Home';
 import { useState, useEffect } from 'react';
 
 let timeInterval = null;
