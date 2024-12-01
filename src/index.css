@@ -28,15 +28,15 @@ body {
 
 @media screen and (max-width: 600px) {
   .container {
-    width: 100%;
-    padding: 0 10px;
+    width: 95%;
+    padding: 0 10px !important;
   }
 }
 
 @media screen and (max-width: 400px) {
   .container {
-    width: 100%;
-    padding: 0 5px;
+    width: 98%;
+    padding: 0 5px !important;
   }
   
 }

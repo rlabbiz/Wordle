@@ -48,7 +48,7 @@ function SelectLevel(props) {
     }, );
 
     return (
-        <div className="select-level">
+        <div className="select-level container">
             <h2 className='h2-heading'>SELECT YOUR CHALLENGE LEVEL</h2>
             <div className="level-buttons">
                 <div>
@@ -70,7 +70,7 @@ function SelectLevel(props) {
 
 function HowToPlay() {
     return (
-        <div className="how-to-play">
+        <div className="how-to-play container">
             <h2 className='h2-heading'>HOW TO PLAY</h2>
             <p>Choose your preferred word length and test your vocabulary skills.</p>
             <p>After each guess, the tiles will change color to guide you:</p>
