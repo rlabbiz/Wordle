@@ -55,7 +55,6 @@ Wordle/
 ├── public/
 ├── src/
 │   ├── components/
-│   ├── utils/
 │   ├── App.js
 │   └── index.js
 └── README.md
@@ -68,14 +67,12 @@ Wordle/
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
-Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 🌟 Acknowledgments
 - Inspired by the original Wordle game
 ```
 
 ## Contact
-Your Name - [Your Email or Social Media]
+Rida Labbiz - contact@rlabbiz.me
 
 **Enjoy playing Wordle!** 🎲🔤
